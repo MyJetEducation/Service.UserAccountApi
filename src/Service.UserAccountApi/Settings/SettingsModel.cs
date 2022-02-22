@@ -20,7 +20,7 @@ namespace Service.UserAccountApi.Settings
 		[YamlProperty("UserAccountApi.UserInfoCrudServiceUrl")]
 		public string UserInfoCrudServiceUrl { get; set; }
 
-		[YamlProperty("UserAccountApi.UserProfileServiceUrl")]
-		public string UserProfileServiceUrl { get; set; }
+		[YamlProperty("UserAccountApi.UserAccountServiceUrl")]
+		public string UserAccountServiceUrl { get; set; }
 	}
 }

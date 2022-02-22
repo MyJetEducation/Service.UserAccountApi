@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Logging;
+using Service.UserAccount.Client;
 using Service.UserInfo.Crud.Client;
-using Service.UserProfile.Client;
 
 namespace Service.UserAccountApi.Modules
 {
@@ -10,7 +10,7 @@ namespace Service.UserAccountApi.Modules
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterUserInfoCrudClient(Program.Settings.UserInfoCrudServiceUrl, Program.LogFactory.CreateLogger(typeof (UserInfoCrudClientFactory)));
-			builder.RegisterUserProfileClient(Program.Settings.UserProfileServiceUrl);
+			builder.RegisterUserAccountClient(Program.Settings.UserAccountServiceUrl, Program.LogFactory.CreateLogger(typeof (UserAccountClientFactory)));
 		}
 	}
 }

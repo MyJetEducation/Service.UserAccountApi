@@ -8,12 +8,12 @@ using NSwag.Annotations;
 using Service.Core.Client.Constants;
 using Service.Core.Client.Models;
 using Service.Grpc;
+using Service.UserAccount.Grpc;
+using Service.UserAccount.Grpc.Models;
 using Service.UserAccountApi.Mappers;
 using Service.UserAccountApi.Models;
 using Service.UserInfo.Crud.Grpc;
 using Service.UserInfo.Crud.Grpc.Models;
-using Service.UserProfile.Grpc;
-using Service.UserProfile.Grpc.Models;
 
 namespace Service.UserAccountApi.Controllers
 {
@@ -26,41 +26,41 @@ namespace Service.UserAccountApi.Controllers
 	[Route("/api/v1/useraccount")]
 	public class UserAccountController : ControllerBase
 	{
-		private readonly IUserProfileService _userProfileService;
+		private readonly IGrpcServiceProxy<IUserAccountService> _userAccountService;
 		private readonly IGrpcServiceProxy<IUserInfoService> _userInfoService;
 
-		public UserAccountController(IGrpcServiceProxy<IUserInfoService> userInfoService, IUserProfileService userProfileService)
+		public UserAccountController(IGrpcServiceProxy<IUserInfoService> userInfoService, IGrpcServiceProxy<IUserAccountService> userAccountService)
 		{
 			_userInfoService = userInfoService;
-			_userProfileService = userProfileService;
+			_userAccountService = userAccountService;
 		}
 
 		[HttpPost("get")]
-		[SwaggerResponse(HttpStatusCode.OK, typeof (DataResponse<UserAccount>), Description = "Ok")]
+		[SwaggerResponse(HttpStatusCode.OK, typeof (DataResponse<Models.UserAccount>), Description = "Ok")]
 		public async ValueTask<IActionResult> GetAccountAsync()
 		{
 			Guid? userId = await GetUserIdAsync();
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
-			AccountGrpcResponse account = await _userProfileService.GetAccount(new GetAccountGrpcRequest {UserId = userId});
+			AccountGrpcResponse account = await _userAccountService.Service.GetAccount(new GetAccountGrpcRequest {UserId = userId});
 
 			AccountDataGrpcModel accountData = account?.Data;
 
 			return accountData == null
 				? StatusResponse.Error(ResponseCode.NoResponseData)
-				: DataResponse<UserAccount>.Ok(accountData.ToModel());
+				: DataResponse<Models.UserAccount>.Ok(accountData.ToModel());
 		}
 
 		[HttpPost("put")]
 		[SwaggerResponse(HttpStatusCode.OK, typeof (StatusResponse), Description = "Status")]
-		public async ValueTask<IActionResult> SaveAccountAsync([FromBody] UserAccount account)
+		public async ValueTask<IActionResult> SaveAccountAsync([FromBody] Models.UserAccount account)
 		{
 			Guid? userId = await GetUserIdAsync();
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
-			CommonGrpcResponse response = await _userProfileService.SaveAccount(account.ToGrpcModel(userId));
+			CommonGrpcResponse response = await _userAccountService.TryCall(service => service.SaveAccount(account.ToGrpcModel(userId)));
 
 			return response?.IsSuccess == true ? StatusResponse.Ok() : StatusResponse.Error();
 		}
