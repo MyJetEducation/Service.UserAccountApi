@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 using Service.Core.Client.Constants;
 using Service.Core.Client.Models;
+using Service.Grpc;
 using Service.UserAccountApi.Mappers;
 using Service.UserAccountApi.Models;
 using Service.UserInfo.Crud.Grpc;
@@ -26,9 +27,9 @@ namespace Service.UserAccountApi.Controllers
 	public class UserAccountController : ControllerBase
 	{
 		private readonly IUserProfileService _userProfileService;
-		private readonly IUserInfoService _userInfoService;
+		private readonly IGrpcServiceProxy<IUserInfoService> _userInfoService;
 
-		public UserAccountController(IUserInfoService userInfoService, IUserProfileService userProfileService)
+		public UserAccountController(IGrpcServiceProxy<IUserInfoService> userInfoService, IUserProfileService userProfileService)
 		{
 			_userInfoService = userInfoService;
 			_userProfileService = userProfileService;
@@ -66,7 +67,7 @@ namespace Service.UserAccountApi.Controllers
 
 		private async ValueTask<Guid?> GetUserIdAsync()
 		{
-			UserInfoResponse userInfoResponse = await _userInfoService.GetUserInfoByLoginAsync(new UserInfoAuthRequest
+			UserInfoResponse userInfoResponse = await _userInfoService.Service.GetUserInfoByLoginAsync(new UserInfoAuthRequest
 			{
 				UserName = User.Identity?.Name
 			});
