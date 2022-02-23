@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
-    <PackageReference Include="MyJetEducation.Service.UserAccount.Client" Version="1.0.0" />
-    <PackageReference Include="MyJetEducation.Service.UserInfo.Crud.Client" Version="1.0.15" />
+    <PackageReference Include="MyJetEducation.Service.UserAccount.Client" Version="1.0.1" />
+    <PackageReference Include="MyJetEducation.Service.UserInfo.Crud.Client" Version="1.0.16" />
     <PackageReference Include="SimpleTrading.ServiceStatusReporterConnector" Version="1.0.9" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.15.10" />
     <PackageReference Include="MyJetEducation.Service.Core.Client" Version="1.0.29" />
@@ -18,6 +18,7 @@
     <PackageReference Include="MyJetWallet.Sdk.Service" Version="2.1.7" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
     <PackageReference Include="MyJetEducation.Service.Grpc" Version="1.0.4" />
+    <PackageReference Include="MyJetEducation.Service.Authorization.Client" Version="1.0.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Constants\" />
   </ItemGroup>
 
 </Project>
