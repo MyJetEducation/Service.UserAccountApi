@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Core.Client.Constants;
+using Service.Core.Client.Models;
 
 namespace Service.UserAccountApi.Models
 {
@@ -24,5 +25,9 @@ namespace Service.UserAccountApi.Models
 			{
 				Status = isSuccess ? ResponseCode.Ok : ResponseCode.Fail
 			});
+
+		public static IActionResult Result(CommonGrpcResponse commonGrpcResponse) => new OkObjectResult(
+			Result(commonGrpcResponse?.IsSuccess == true)
+			);
 	}
 }
