@@ -10,7 +10,6 @@ using Service.UserAccount.Grpc;
 using Service.UserAccount.Grpc.Models;
 using Service.UserAccountApi.Mappers;
 using Service.UserAccountApi.Models;
-using Service.UserInfo.Crud.Grpc;
 
 namespace Service.UserAccountApi.Controllers
 {
@@ -20,14 +19,13 @@ namespace Service.UserAccountApi.Controllers
 	{
 		private readonly IGrpcServiceProxy<IUserAccountService> _userAccountService;
 
-		public UserAccountController(IGrpcServiceProxy<IUserInfoService> userInfoService, IGrpcServiceProxy<IUserAccountService> userAccountService) : base(userInfoService) =>
-			_userAccountService = userAccountService;
+		public UserAccountController(IGrpcServiceProxy<IUserAccountService> userAccountService) => _userAccountService = userAccountService;
 
 		[HttpPost("get")]
 		[SwaggerResponse(HttpStatusCode.OK, typeof (DataResponse<Models.UserAccount>), Description = "Ok")]
 		public async ValueTask<IActionResult> GetAccountAsync()
 		{
-			Guid? userId = await GetUserIdAsync();
+			Guid? userId = GetUserId();
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
@@ -44,7 +42,7 @@ namespace Service.UserAccountApi.Controllers
 		[SwaggerResponse(HttpStatusCode.OK, typeof (StatusResponse), Description = "Status")]
 		public async ValueTask<IActionResult> SaveAccountAsync([FromBody] Models.UserAccount account)
 		{
-			Guid? userId = await GetUserIdAsync();
+			Guid? userId = GetUserId();
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 

@@ -17,9 +17,6 @@ namespace Service.UserAccountApi.Settings
 		[YamlProperty("UserAccountApi.JwtAudience")]
 		public string JwtAudience { get; set; }
 
-		[YamlProperty("UserAccountApi.UserInfoCrudServiceUrl")]
-		public string UserInfoCrudServiceUrl { get; set; }
-
 		[YamlProperty("UserAccountApi.UserAccountServiceUrl")]
 		public string UserAccountServiceUrl { get; set; }
 	}

@@ -11,7 +11,6 @@ using Service.UserAccount.Grpc;
 using Service.UserAccount.Grpc.Models;
 using Service.UserAccountApi.Constants;
 using Service.UserAccountApi.Models;
-using Service.UserInfo.Crud.Grpc;
 
 namespace Service.UserAccountApi.Controllers
 {
@@ -21,8 +20,7 @@ namespace Service.UserAccountApi.Controllers
 	{
 		private readonly IGrpcServiceProxy<IUserAccountService> _userAccountService;
 
-		public ChangeEmailController(IGrpcServiceProxy<IUserInfoService> userInfoService, IGrpcServiceProxy<IUserAccountService> userAccountService) : base(userInfoService) =>
-			_userAccountService = userAccountService;
+		public ChangeEmailController(IGrpcServiceProxy<IUserAccountService> userAccountService) => _userAccountService = userAccountService;
 
 		[HttpPost("change")]
 		[SwaggerResponse(HttpStatusCode.OK, typeof (StatusResponse), Description = "Status")]
@@ -31,7 +29,7 @@ namespace Service.UserAccountApi.Controllers
 			if (!UserDataRequestValidator.ValidateLogin(request.Email))
 				return StatusResponse.Error(UserAccountResponseCode.NotValidEmail);
 
-			Guid? userId = await GetUserIdAsync();
+			Guid? userId = GetUserId();
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
@@ -48,7 +46,7 @@ namespace Service.UserAccountApi.Controllers
 		[SwaggerResponse(HttpStatusCode.OK, typeof (StatusResponse), Description = "Status")]
 		public async ValueTask<IActionResult> ConfirmEmailAsync([FromBody] ConfirmEmailRequest request)
 		{
-			Guid? userId = await GetUserIdAsync();
+			Guid? userId = GetUserId();
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
