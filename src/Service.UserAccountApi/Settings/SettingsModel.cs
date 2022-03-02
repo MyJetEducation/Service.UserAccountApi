@@ -14,9 +14,6 @@ namespace Service.UserAccountApi.Settings
 		[YamlProperty("UserAccountApi.ElkLogs")]
 		public LogElkSettings ElkLogs { get; set; }
 
-		[YamlProperty("UserAccountApi.JwtAudience")]
-		public string JwtAudience { get; set; }
-
 		[YamlProperty("UserAccountApi.UserAccountServiceUrl")]
 		public string UserAccountServiceUrl { get; set; }
 	}

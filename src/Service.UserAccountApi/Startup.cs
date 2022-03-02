@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyJetWallet.Sdk.Service;
 using Prometheus;
+using Service.Core.Client.Constants;
 using Service.UserAccountApi.Modules;
 using Service.Web;
 using SimpleTrading.ServiceStatusReporterConnector;
@@ -22,12 +23,11 @@ namespace Service.UserAccountApi
 		{
 			services.BindCodeFirstGrpc();
 			services.AddHostedService<ApplicationLifetimeManager>();
-			services.AddMyTelemetry("ED-", Program.Settings.ZipkinUrl);
+			services.AddMyTelemetry(Configuration.TelemetryPrefix, Program.Settings.ZipkinUrl);
 			services.SetupSwaggerDocumentation(DocumentName, ApiName);
 			services.ConfigurateHeaders();
 			services.AddControllers();
-			services.AddAuthentication(StartupUtils.ConfigureAuthenticationOptions)
-				.AddJwtBearer(options => StartupUtils.ConfigureJwtBearerOptions(options, Program.Settings.JwtAudience, Program.JwtSecret));
+			services.ConfigureAuthentication();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,7 +49,7 @@ namespace Service.UserAccountApi
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
-				endpoints.MapGet("/", async context => await context.Response.WriteAsync("MyJetEducation API endpoint"));
+				endpoints.MapGet("/", async context => await context.Response.WriteAsync("API endpoint"));
 			});
 		}
 
