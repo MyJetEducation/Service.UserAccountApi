@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 using Service.Authorization.Client.Services;
-using Service.Core.Client.Models;
 using Service.Grpc;
 using Service.UserAccount.Grpc;
 using Service.UserAccount.Grpc.Models;
@@ -33,13 +32,22 @@ namespace Service.UserAccountApi.Controllers
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
-			CommonGrpcResponse response = await _userAccountService.Service.ChangeEmailRequest(new ChangeEmailRequestGrpcRequest
+			ChangeEmailGrpcResponse response = await _userAccountService.Service.ChangeEmailRequest(new ChangeEmailRequestGrpcRequest
 			{
 				UserId = userId,
 				Email = request.Email
 			});
 
-			return StatusResponse.Result(response);
+			if (response == null)
+				return StatusResponse.Error();
+
+			if (response.EmailAlreadyRegistered)
+				return StatusResponse.Error(UserAccountResponseCode.EmailAlreadyRegistered);
+
+			if (response.CantChangeToSameEmail)
+				return StatusResponse.Error(UserAccountResponseCode.CantChangeToSameEmail);
+
+			return StatusResponse.Ok();
 		}
 
 		[HttpPost("confirm")]
@@ -50,12 +58,21 @@ namespace Service.UserAccountApi.Controllers
 			if (userId == null)
 				return StatusResponse.Error(ResponseCode.UserNotFound);
 
-			CommonGrpcResponse response = await _userAccountService.Service.ChangeEmailConfirm(new ChangeEmailConfirmGrpcRequest
+			ChangeEmailConfirmGrpcResponse response = await _userAccountService.Service.ChangeEmailConfirm(new ChangeEmailConfirmGrpcRequest
 			{
 				Hash = request.Hash
 			});
 
-			return StatusResponse.Result(response);
+			if (response == null || response.Changed == false)
+				return StatusResponse.Error();
+
+			if (response.HashExpired)
+				return StatusResponse.Error(UserAccountResponseCode.HashExpired);
+
+			if (response.HashAlreadyUsed)
+				return StatusResponse.Error(UserAccountResponseCode.HashAlreadyUsed);
+
+			return StatusResponse.Ok();
 		}
 	}
 }
