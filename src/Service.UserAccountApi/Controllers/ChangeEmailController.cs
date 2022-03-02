@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 using Service.Authorization.Client.Services;
-using Service.Core.Client.Constants;
 using Service.Core.Client.Models;
 using Service.Grpc;
 using Service.UserAccount.Grpc;
 using Service.UserAccount.Grpc.Models;
 using Service.UserAccountApi.Constants;
 using Service.UserAccountApi.Models;
+using Service.Web;
 
 namespace Service.UserAccountApi.Controllers
 {
