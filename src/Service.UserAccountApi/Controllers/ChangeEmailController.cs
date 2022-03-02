@@ -63,7 +63,7 @@ namespace Service.UserAccountApi.Controllers
 				Hash = request.Hash
 			});
 
-			if (response == null || response.Changed == false)
+			if (response == null)
 				return StatusResponse.Error();
 
 			if (response.HashExpired)
@@ -72,7 +72,7 @@ namespace Service.UserAccountApi.Controllers
 			if (response.HashAlreadyUsed)
 				return StatusResponse.Error(UserAccountResponseCode.HashAlreadyUsed);
 
-			return StatusResponse.Ok();
+			return StatusResponse.Result(response.Changed);
 		}
 	}
 }
