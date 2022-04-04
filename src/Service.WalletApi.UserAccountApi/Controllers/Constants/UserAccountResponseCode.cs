@@ -1,4 +1,4 @@
-﻿namespace Service.UserAccountApi.Constants
+﻿namespace Service.WalletApi.UserAccountApi.Controllers.Constants
 {
 	public class UserAccountResponseCode
 	{

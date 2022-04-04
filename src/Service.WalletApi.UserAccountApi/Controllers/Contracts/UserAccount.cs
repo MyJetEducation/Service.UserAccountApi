@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Service.UserAccountApi.Models
+namespace Service.WalletApi.UserAccountApi.Controllers.Contracts
 {
 	public class UserAccount
 	{

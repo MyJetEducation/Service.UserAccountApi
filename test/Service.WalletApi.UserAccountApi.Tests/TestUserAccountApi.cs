@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace Service.UserAccountApi.Tests
+namespace Service.WalletApi.UserAccountApi.Tests
 {
-    public class TestExample
+    public class TestUserAccountApi
     {
         [SetUp]
         public void Setup()
